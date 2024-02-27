@@ -1,0 +1,2 @@
+drop database if exists normalised_ecf_data_prototype;
+create database normalised_ecf_data_prototype;
