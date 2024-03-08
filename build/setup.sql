@@ -122,8 +122,8 @@ insert into tenureships(id, person_id, school_id, started_on, finished_on) value
 
 create table mentorships (
   id integer primary key,
-  mentor_id integer references tenureships(id),
-  mentee_id integer references tenureships(id),
+  mentor_id integer references tenureships(id) null,
+  mentee_id integer references tenureships(id) not null,
   started_on date not null,
   finished_on date null
 );
@@ -131,15 +131,15 @@ create table mentorships (
 insert into mentorships(id, mentor_id, mentee_id, started_on, finished_on) values
   (1, 20, 1, '2021-10-01', null),
   (2, 21, 2, '2021-10-02', '2022-09-02'),
-  (3, 22, 3, '2021-10-03', null),
+  (3, null, 3, '2021-10-03', null),
   (4, 23, 4, '2021-10-04', null),
   (5, 20, 5, '2021-10-05', null),
   (6, 20, 6, '2021-10-04', '2022-03-20'),
   (7, 21, 7, '2021-10-05', null),
-  (8, 21, 8, '2021-10-05', null),
+  (8, null, 8, '2021-10-05', null),
   (9, 20, 9, '2021-10-05', null),
   (10, 20, 10, '2021-10-05', '2022-03-09'),
-  (11, 21, 11, '2021-10-05', null),
+  (11, null, 11, '2021-10-05', null),
   (12, 23, 12, '2021-10-05', null),
   (13, 22, 13, '2021-10-05', null)
 ;
