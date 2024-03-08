@@ -15,8 +15,7 @@ Given that:
     - a mentor
   * a **induction record** is made from a list of **induction periods**
   * an **training period** requires an ECT to be associated with:
-    - a delivery partner
-    - a lead provider
+    - a delivery partner and lead provider partnership
     - a mentor
   * a **training record** is made from a list of **training periods**
 
@@ -36,6 +35,11 @@ likely be easier to work with.
 
 ```mermaid
 erDiagram
+    cohorts {
+        integer id PK
+        integer year
+    }
+
     appropriate_bodies {
         integer id PK
         character_varying name
@@ -45,23 +49,28 @@ erDiagram
         integer appropriate_body_id FK
         integer id PK
         integer person_id FK
+        date started_on
+        date finished_on
     }
 
-    delivery_partner_associations {
-        integer delivery_partner_id FK
+    provider_relationships {
         integer id PK
+        integer delivery_partner_id FK
+        integer lead_provider_id FK
+        integer cohort_id FK
+    }
+
+    people_provider_relationships {
+        integer id PK
+        integer provider_relationship_id FK
         integer person_id FK
+        date started_on
+        date finished_on
     }
 
     delivery_partners {
         integer id PK
         character_varying name
-    }
-
-    lead_provider_associations {
-        integer id PK
-        integer lead_provider_id FK
-        integer person_id FK
     }
 
     lead_providers {
@@ -97,12 +106,16 @@ erDiagram
 
     appropriate_body_appointments }o--|| appropriate_bodies : "appropriate_body_id"
     appropriate_body_appointments }o--|| people : "person_id"
-    delivery_partner_associations }o--|| delivery_partners : "delivery_partner_id"
-    delivery_partner_associations }o--|| people : "person_id"
-    lead_provider_associations }o--|| lead_providers : "lead_provider_id"
-    lead_provider_associations }o--|| people : "person_id"
+
     mentorships }o--|| tenureships : "mentee_id"
     mentorships }o--|| tenureships : "mentor_id"
     tenureships }o--|| people : "person_id"
     tenureships }o--|| schools : "school_id"
+
+    lead_providers ||--o{ provider_relationships : ""
+    delivery_partners ||--o{ provider_relationships : ""
+    cohorts ||--o{ provider_relationships : ""
+
+    provider_relationships ||--o{ people_provider_relationships : ""
+    people_provider_relationships }o--|| people : ""
 ```

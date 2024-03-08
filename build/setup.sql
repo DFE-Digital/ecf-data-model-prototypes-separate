@@ -12,13 +12,29 @@ insert into people (id, name) values
   (5, 'Edward'),
   (6, 'Edwin'),
   (7, 'Erica'),
+  (8, 'Ellie'),
+  (9, 'Elizabeth'),
+  (10, 'Eleanor'),
+  (11, 'Ebenezer'),
+  (12, 'Eddy'),
+  (13, 'Emilia'),
 
   -- Mentors
-  (8, 'Mary'),
-  (9, 'Michael'),
-  (10, 'Maud'),
-  (11, 'Mandy'),
-  (12, 'Michaela')
+  (20, 'Mary'),
+  (21, 'Michael'),
+  (22, 'Maud'),
+  (23, 'Mandy'),
+  (24, 'Michaela')
+;
+
+create table cohorts (
+  start_year smallint primary key
+);
+
+insert into cohorts (start_year) values
+  (2022),
+  (2023),
+  (2024)
 ;
 
 create table schools (
@@ -83,16 +99,25 @@ insert into tenureships(id, person_id, school_id, started_on, finished_on) value
   (5, 5, 1, '2021-09-05', null),
   (6, 6, 1, '2021-09-04', null),
   (7, 7, 1, '2021-09-05', null),
+  (8, 8, 2, '2021-09-06', null),
+
+  (9, 9, 2, '2022-09-01', null),
+  (10, 10, 2, '2022-09-02', null),
+  (11, 11, 2, '2022-09-03', null),
+  (12, 12, 2, '2022-09-04', null),
+  (13, 13, 2, '2022-09-05', '2022-12-04'),
 
   -- mentors
-  (8, 8, 1, '2021-09-05', '2022-09-05'),
-  (9, 9, 1, '2021-09-05', null),
-  (10, 10, 1, '2021-09-05', null),
-  (11, 11, 1, '2021-09-05', null),
+  (20, 20, 1, '2021-09-05', '2022-09-05'),
+  (21, 21, 1, '2021-09-05', null),
+  (22, 22, 1, '2021-09-05', null),
+  (23, 23, 1, '2021-09-05', null),
 
   -- subsequent
-  (12, 2, 2, '2022-09-09', null),
-  (13, 8, 3, '2022-09-09', null)
+  (30, 2, 2, '2022-09-09', '2023-04-05'),
+  (31, 2, 4, '2023-06-01', null),
+  (32, 8, 3, '2022-09-09', null),
+  (33, 13, 4, '2023-01-10', '2024-02-03')
 ;
 
 create table mentorships (
@@ -104,13 +129,19 @@ create table mentorships (
 );
 
 insert into mentorships(id, mentor_id, mentee_id, started_on, finished_on) values
-  (1, 8, 1, '2021-10-01', null),
-  (2, 9, 2, '2021-10-02', '2022-09-02'),
-  (3, 10, 3, '2021-10-03', null),
-  (4, 11, 4, '2021-10-04', null),
-  (5, 8, 5, '2021-10-05', null),
-  (6, 9, 6, '2021-10-04', '2022-03-20'),
-  (7, 10, 7, '2021-10-05', null)
+  (1, 20, 1, '2021-10-01', null),
+  (2, 21, 2, '2021-10-02', '2022-09-02'),
+  (3, 22, 3, '2021-10-03', null),
+  (4, 23, 4, '2021-10-04', null),
+  (5, 20, 5, '2021-10-05', null),
+  (6, 20, 6, '2021-10-04', '2022-03-20'),
+  (7, 21, 7, '2021-10-05', null),
+  (8, 21, 8, '2021-10-05', null),
+  (9, 20, 9, '2021-10-05', null),
+  (10, 20, 10, '2021-10-05', '2022-03-09'),
+  (11, 21, 11, '2021-10-05', null),
+  (12, 23, 12, '2021-10-05', null),
+  (13, 22, 13, '2021-10-05', null)
 ;
 
 create table appropriate_body_associations (
@@ -128,41 +159,61 @@ insert into appropriate_body_associations(id, person_id, appropriate_body_id, st
   (4, 4, 1, '2021-09-08', null),
   (5, 5, 1, '2021-09-08', null),
   (6, 6, 1, '2021-09-08', '2022-09-09'),
-  (7, 7, 1, '2021-09-08', '2022-09-10')
+  (7, 7, 2, '2021-09-08', '2022-09-10'),
+  (8, 8, 2, '2022-09-08', null),
+  (9, 9, 2, '2022-09-08', null),
+  (10, 10, 2, '2022-09-08', null),
+  (11, 11, 1, '2022-09-08', '2023-06-11'),
+  (12, 12, 1, '2022-09-08', '2023-07-12'),
+  (13, 13, 1, '2022-09-08', null)
 ;
 
-create table delivery_partner_associations (
+create table provider_relationships (
   id integer primary key,
-  person_id integer references people(id),
   delivery_partner_id integer references delivery_partners(id),
-  started_on date not null,
-  finished_on date null
+  lead_provider_id integer references lead_providers(id),
+  cohort integer references cohorts(start_year)
 );
 
-insert into delivery_partner_associations(id, person_id, delivery_partner_id, started_on, finished_on) values
-  (1, 1, 1, '2021-09-08', null),
-  (2, 2, 1, '2021-09-08', '2022-09-08'),
-  (3, 3, 2, '2021-09-08', null),
-  (4, 4, 2, '2021-09-08', null),
-  (5, 5, 2, '2021-09-08', null),
-  (6, 6, 1, '2021-09-08', null),
-  (7, 7, 1, '2021-09-08', '2022-09-09')
+create unique index unique_provider_relationships on provider_relationships(
+  delivery_partner_id,
+  lead_provider_id,
+  cohort
+);
+
+insert into provider_relationships(id, delivery_partner_id, lead_provider_id, cohort) values
+  (1,  1, 1, 2022),
+  (2,  2, 1, 2022),
+  (3,  3, 2, 2022),
+  (4,  3, 3, 2022),
+
+  (10,  1, 1, 2023),
+  (11,  2, 1, 2023),
+  (12,  3, 2, 2023),
+  (13,  3, 3, 2023)
 ;
 
-create table lead_provider_associations (
+create table people_provider_relationships (
   id integer primary key,
+  provider_relationship_id integer references provider_relationships(id),
   person_id integer references people(id),
-  lead_provider_id integer references lead_providers(id),
   started_on date not null,
   finished_on date null
 );
 
-insert into lead_provider_associations(id, person_id, lead_provider_id, started_on, finished_on) values
-  (1, 1, 1, '2021-10-08', null),
-  (2, 2, 1, '2021-10-08', null),
-  (3, 3, 1, '2021-10-08', '2023-01-05'),
-  (4, 4, 1, '2021-10-08', null),
-  (5, 5, 1, '2021-10-08', '2023-01-05'),
-  (6, 6, 1, '2021-10-08', null),
-  (7, 7, 1, '2021-10-08', null)
+insert into people_provider_relationships(id, provider_relationship_id, person_id, started_on, finished_on) values
+  (1, 1, 1, '2022-09-08', null),
+  (2, 1, 2, '2022-09-09', null),
+  (3, 1, 3, '2022-09-10', null),
+  (4, 1, 4, '2022-09-11', null),
+  (5, 3, 5, '2022-09-12', '2023-09-14'),
+  (6, 3, 6, '2022-09-13', null),
+  (7, 3, 7, '2022-09-13', null),
+
+  (10, 10, 8, '2023-09-10', null),
+  (11, 10, 9, '2023-09-11', null),
+  (12, 11, 10, '2023-09-12', null),
+  (13, 11, 11, '2023-09-13', '2024-01-08'),
+  (14, 12, 12, '2023-09-13', null),
+  (15, 13, 13, '2023-09-13', null)
 ;

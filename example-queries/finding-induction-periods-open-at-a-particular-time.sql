@@ -2,7 +2,7 @@
 select
   ects.name,
   mentors.name as current_mentor_name,
-  ms.started_on as mentor_since,
+  ms.started_on as mentorship_started_on,
   ab.name as current_ab,
   aba.started_on as appropriate_body_since
 from
