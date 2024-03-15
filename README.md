@@ -4,7 +4,7 @@ This is a prototype demonstrating how we might store both induction records and 
 
 * doesn't duplicate information
 * is easy to query
-* enables us to query a person's state at any point in time
+* enables us to query a participant's state at any point in time
 * allows us to build a picture of their training/induction history
 
 ## Reasoning
@@ -48,7 +48,7 @@ erDiagram
     appropriate_body_appointments {
         integer appropriate_body_id FK
         integer id PK
-        integer person_id FK
+        integer participant_id FK
         date started_on
         date finished_on
     }
@@ -60,10 +60,10 @@ erDiagram
         integer cohort_id FK
     }
 
-    people_provider_relationships {
+    participants_provider_relationships {
         integer id PK
         integer provider_relationship_id FK
-        integer person_id FK
+        integer participant_id FK
         date started_on
         date finished_on
     }
@@ -86,7 +86,7 @@ erDiagram
         date started_on
     }
 
-    people {
+    participants {
         integer id PK
         character_varying name
     }
@@ -99,23 +99,23 @@ erDiagram
     tenureships {
         date finished_on
         integer id PK
-        integer person_id FK
+        integer participant_id FK
         integer school_id FK
         date started_on
     }
 
     appropriate_body_appointments }o--|| appropriate_bodies : "appropriate_body_id"
-    appropriate_body_appointments }o--|| people : "person_id"
+    appropriate_body_appointments }o--|| participants : "participant_id"
 
     mentorships }o--|| tenureships : "mentee_id"
     mentorships }o--|| tenureships : "mentor_id"
-    tenureships }o--|| people : "person_id"
+    tenureships }o--|| participants : "participant_id"
     tenureships }o--|| schools : "school_id"
 
     lead_providers ||--o{ provider_relationships : ""
     delivery_partners ||--o{ provider_relationships : ""
     cohorts ||--o{ provider_relationships : ""
 
-    provider_relationships ||--o{ people_provider_relationships : ""
-    people_provider_relationships }o--|| people : ""
+    provider_relationships ||--o{ participants_provider_relationships : ""
+    participants_provider_relationships }o--|| participants : ""
 ```

@@ -1,9 +1,9 @@
-create table people (
+create table participants (
   id smallint primary key,
   name varchar(64)
 );
 
-insert into people (id, name) values
+insert into participants (id, name) values
   -- ECTs
   (1, 'Ebony'),
   (2, 'Emily'),
@@ -83,13 +83,13 @@ insert into lead_providers(id, name) values
 
 create table tenureships (
   id integer primary key,
-  person_id integer references people(id),
+  participant_id integer references participants(id),
   school_id integer references schools(id),
   started_on date not null,
   finished_on date null
 );
 
-insert into tenureships(id, person_id, school_id, started_on, finished_on) values
+insert into tenureships(id, participant_id, school_id, started_on, finished_on) values
 
   -- ects
   (1, 1, 1, '2021-09-01', null),
@@ -146,13 +146,13 @@ insert into mentorships(id, mentor_id, mentee_id, started_on, finished_on) value
 
 create table appropriate_body_associations (
   id integer primary key,
-  person_id integer references people(id),
+  participant_id integer references participants(id),
   appropriate_body_id integer references appropriate_bodies(id),
   started_on date not null,
   finished_on date null
 );
 
-insert into appropriate_body_associations(id, person_id, appropriate_body_id, started_on, finished_on) values
+insert into appropriate_body_associations(id, participant_id, appropriate_body_id, started_on, finished_on) values
   (1, 1, 1, '2021-09-08', null),
   (2, 2, 1, '2021-09-08', null),
   (3, 3, 1, '2021-09-08', '2022-09-08'),
@@ -193,15 +193,15 @@ insert into provider_relationships(id, delivery_partner_id, lead_provider_id, co
   (13,  3, 3, 2023)
 ;
 
-create table people_provider_relationships (
+create table participants_provider_relationships (
   id integer primary key,
   provider_relationship_id integer references provider_relationships(id),
-  person_id integer references people(id),
+  participant_id integer references participants(id),
   started_on date not null,
   finished_on date null
 );
 
-insert into people_provider_relationships(id, provider_relationship_id, person_id, started_on, finished_on) values
+insert into participants_provider_relationships(id, provider_relationship_id, participant_id, started_on, finished_on) values
   (1, 1, 1, '2022-09-08', null),
   (2, 1, 2, '2022-09-09', null),
   (3, 1, 3, '2022-09-10', null),
