@@ -120,13 +120,12 @@ erDiagram
     rosters }o--|| participants : "participant_id"
     rosters }o--|| schools : "school_id"
 
-    lead_providers ||--o{ provider_relationships : ""
-    delivery_partners ||--o{ provider_relationships : ""
-    cohorts ||--o{ provider_relationships : ""
+    lead_providers ||--o{ provider_relationships : "lead_provider_id"
+    delivery_partners ||--o{ provider_relationships : "delivery_partner_id"
+    cohorts ||--o{ provider_relationships : "cohort_id"
 
-    provider_relationships ||--o{ training_courses : ""
-    provider_materials ||--o{ training_courses : ""
-    training_courses }o--|| participants : ""
-
+    provider_relationships ||--o{ training_courses : "provider_relationships_id"
+    provider_materials ||--o{ training_courses : "provider_materials_id"
+    training_courses }o--|| participants : "participant_id"
 ```
 
