@@ -60,9 +60,16 @@ erDiagram
         integer cohort_id FK
     }
 
-    participants_provider_relationships {
+    provider_materials {
         integer id PK
+        character_varying name
+    }
+        
+    training_courses {
+        integer id PK
+        character_varying training_type
         integer provider_relationship_id FK
+        integer provider_materials_id FK
         integer participant_id FK
         date started_on
         date finished_on
@@ -96,26 +103,30 @@ erDiagram
         character_varying name
     }
 
-    tenureships {
-        date finished_on
+    rosters {
         integer id PK
         integer participant_id FK
         integer school_id FK
+        character_varying role
         date started_on
+        date finished_on
     }
 
     appropriate_body_appointments }o--|| appropriate_bodies : "appropriate_body_id"
     appropriate_body_appointments }o--|| participants : "participant_id"
 
-    mentorships }o--|| tenureships : "mentee_id"
-    mentorships }o--|| tenureships : "mentor_id"
-    tenureships }o--|| participants : "participant_id"
-    tenureships }o--|| schools : "school_id"
+    mentorships }o--|| rosters : "mentee_id"
+    mentorships }o--|| rosters : "mentor_id"
+    rosters }o--|| participants : "participant_id"
+    rosters }o--|| schools : "school_id"
 
     lead_providers ||--o{ provider_relationships : ""
     delivery_partners ||--o{ provider_relationships : ""
     cohorts ||--o{ provider_relationships : ""
 
-    provider_relationships ||--o{ participants_provider_relationships : ""
-    participants_provider_relationships }o--|| participants : ""
+    provider_relationships ||--o{ training_courses : ""
+    provider_materials ||--o{ training_courses : ""
+    training_courses }o--|| participants : ""
+
 ```
+

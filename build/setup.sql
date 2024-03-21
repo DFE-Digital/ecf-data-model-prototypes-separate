@@ -204,7 +204,7 @@ insert into provider_materials(id, name) values
   (2, 'Amazing Materials')
 ;
 
-create table training_course (
+create table training_courses (
   id integer primary key,
   training_type varchar(64) not null,
   provider_relationship_id integer references provider_relationships(id),
@@ -214,7 +214,7 @@ create table training_course (
   finished_on date null
 );
 
-insert into training_course(id, training_type, provider_relationship_id, participant_id, provider_materials_id, started_on, finished_on) values
+insert into training_courses(id, training_type, provider_relationship_id, participant_id, provider_materials_id, started_on, finished_on) values
   (1, 'fip', 1, 1, null, '2022-09-08', null),
   (2, 'fip', 1, 2, null, '2022-09-09', null),
   (3, 'fip', 1, 3, null, '2022-09-10', null),
