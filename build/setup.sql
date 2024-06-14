@@ -141,7 +141,10 @@ insert into mentorships(id, mentor_id, mentee_id, started_on, finished_on) value
   (10, 20, 10, '2021-10-05', '2022-03-09'),
   (11, null, 11, '2021-10-05', null),
   (12, 23, 12, '2021-10-05', null),
-  (13, 22, 13, '2021-10-05', null)
+  (13, 22, 13, '2021-10-05', null),
+
+  (14, 21, 10, '2022-08-10', '2023-01-05'),
+  (15, 21, 6, '2022-05-04', '2023-03-09')
 ;
 
 create table appropriate_body_associations (
