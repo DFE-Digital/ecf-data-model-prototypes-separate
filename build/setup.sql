@@ -1,9 +1,9 @@
-create table participants (
+create table teachers (
   id smallint primary key,
   name varchar(64)
 );
 
-insert into participants (id, name) values
+insert into teachers (id, name) values
   -- ECTs
   (1, 'Ebony'),
   (2, 'Emily'),
@@ -27,11 +27,11 @@ insert into participants (id, name) values
   (24, 'Michaela')
 ;
 
-create table cohorts (
+create table academic_years (
   start_year smallint primary key
 );
 
-insert into cohorts (start_year) values
+insert into academic_years (start_year) values
   (2022),
   (2023),
   (2024)
@@ -81,17 +81,23 @@ insert into lead_providers(id, name) values
   (3, 'TF')
 ;
 
-create table tenureships (
+create table trains_at (
   id integer primary key,
-  participant_id integer references participants(id),
+  teacher_id integer references teachers(id),
   school_id integer references schools(id),
   started_on date not null,
   finished_on date null
 );
 
-insert into tenureships(id, participant_id, school_id, started_on, finished_on) values
+create table mentors_at (
+  id integer primary key,
+  teacher_id integer references teachers(id),
+  school_id integer references schools(id),
+  started_on date not null,
+  finished_on date null
+);
 
-  -- ects
+insert into trains_at(id, teacher_id, school_id, started_on, finished_on) values
   (1, 1, 1, '2021-09-01', null),
   (2, 2, 1, '2021-09-02', '2022-09-02'),
   (3, 3, 1, '2021-09-03', null),
@@ -107,23 +113,22 @@ insert into tenureships(id, participant_id, school_id, started_on, finished_on) 
   (12, 12, 2, '2022-09-04', null),
   (13, 13, 2, '2022-09-05', '2022-12-04'),
 
-  -- mentors
-  (20, 20, 1, '2021-09-05', '2022-09-05'),
-  (21, 21, 1, '2021-09-05', null),
-  (22, 22, 1, '2021-09-05', null),
-  (23, 23, 1, '2021-09-05', null),
-
   -- subsequent
   (30, 2, 2, '2022-09-09', '2023-04-05'),
   (31, 2, 4, '2023-06-01', null),
   (32, 8, 3, '2022-09-09', null),
-  (33, 13, 4, '2023-01-10', '2024-02-03')
-;
+  (33, 13, 4, '2023-01-10', '2024-02-03');
+
+insert into mentors_at(id, teacher_id, school_id, started_on, finished_on) values
+  (20, 20, 1, '2021-09-05', '2022-09-05'),
+  (21, 21, 1, '2021-09-05', null),
+  (22, 22, 1, '2021-09-05', null),
+  (23, 23, 1, '2021-09-05', null);
 
 create table mentorships (
   id integer primary key,
-  mentor_id integer references tenureships(id) null,
-  mentee_id integer references tenureships(id) not null,
+  mentor_id integer references mentors_at(id) null,
+  mentee_id integer references trains_at(id) not null,
   started_on date not null,
   finished_on date null
 );
@@ -147,15 +152,15 @@ insert into mentorships(id, mentor_id, mentee_id, started_on, finished_on) value
   (15, 21, 6, '2022-05-04', '2023-03-09')
 ;
 
-create table appropriate_body_associations (
+create table induction_periods (
   id integer primary key,
-  participant_id integer references participants(id),
+  teacher_id integer references teachers(id),
   appropriate_body_id integer references appropriate_bodies(id),
   started_on date not null,
   finished_on date null
 );
 
-insert into appropriate_body_associations(id, participant_id, appropriate_body_id, started_on, finished_on) values
+insert into induction_periods(id, teacher_id, appropriate_body_id, started_on, finished_on) values
   (1, 1, 1, '2021-09-08', null),
   (2, 2, 1, '2021-09-08', null),
   (3, 3, 1, '2021-09-08', '2022-09-08'),
@@ -171,20 +176,20 @@ insert into appropriate_body_associations(id, participant_id, appropriate_body_i
   (13, 13, 1, '2022-09-08', null)
 ;
 
-create table provider_relationships (
+create table provider_partnerships (
   id integer primary key,
   delivery_partner_id integer references delivery_partners(id),
   lead_provider_id integer references lead_providers(id),
-  cohort integer references cohorts(start_year)
+  academic_year integer references academic_years(start_year)
 );
 
-create unique index unique_provider_relationships on provider_relationships(
+create unique index unique_provider_partnerships on provider_partnerships(
   delivery_partner_id,
   lead_provider_id,
-  cohort
+  academic_year
 );
 
-insert into provider_relationships(id, delivery_partner_id, lead_provider_id, cohort) values
+insert into provider_partnerships(id, delivery_partner_id, lead_provider_id, academic_year) values
   (1,  1, 1, 2022),
   (2,  2, 1, 2022),
   (3,  3, 2, 2022),
@@ -196,27 +201,30 @@ insert into provider_relationships(id, delivery_partner_id, lead_provider_id, co
   (13,  3, 3, 2023)
 ;
 
-create table participants_provider_relationships (
+create type training_type as enum ('CIP', 'FIP', 'DIY');
+
+create table training (
   id integer primary key,
-  provider_relationship_id integer references provider_relationships(id),
-  participant_id integer references participants(id),
+  provider_partnership_id integer references provider_partnerships(id),
+  teacher_id integer references teachers(id),
+  training_type training_type,
   started_on date not null,
   finished_on date null
 );
 
-insert into participants_provider_relationships(id, provider_relationship_id, participant_id, started_on, finished_on) values
-  (1, 1, 1, '2022-09-08', null),
-  (2, 1, 2, '2022-09-09', null),
-  (3, 1, 3, '2022-09-10', null),
-  (4, 1, 4, '2022-09-11', null),
-  (5, 3, 5, '2022-09-12', '2023-09-14'),
-  (6, 3, 6, '2022-09-13', null),
-  (7, 3, 7, '2022-09-13', null),
+insert into training(id, provider_partnership_id, teacher_id, training_type, started_on, finished_on) values
+  (1, 1, 1, 'FIP', '2022-09-08', null),
+  (2, 1, 2, 'FIP', '2022-09-09', null),
+  (3, 1, 3, 'FIP', '2022-09-10', null),
+  (4, 1, 4, 'CIP', '2022-09-11', null),
+  (5, 3, 5, 'CIP', '2022-09-12', '2023-09-14'),
+  (6, 3, 6, 'CIP', '2022-09-13', null),
+  (7, 3, 7, 'CIP', '2022-09-13', null),
 
-  (10, 10, 8, '2023-09-10', null),
-  (11, 10, 9, '2023-09-11', null),
-  (12, 11, 10, '2023-09-12', null),
-  (13, 11, 11, '2023-09-13', '2024-01-08'),
-  (14, 12, 12, '2023-09-13', null),
-  (15, 13, 13, '2023-09-13', null)
+  (10, 10, 8, 'CIP', '2023-09-10', null),
+  (11, 10, 9, 'FIP', '2023-09-11', null),
+  (12, 11, 10, 'CIP', '2023-09-12', null),
+  (13, 11, 11,'FIP',  '2023-09-13', '2024-01-08'),
+  (14, 12, 12, 'CIP', '2023-09-13', null),
+  (15, 13, 13, 'FIP',  '2023-09-13', null)
 ;
