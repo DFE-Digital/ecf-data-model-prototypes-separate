@@ -6,7 +6,7 @@ create table teachers (
 insert into teachers (id, name) values
   -- ECTs
   (1, 'Ebony'),
-  -- (2, 'Emily'),
+  (2, 'Emily'),
   -- (3, 'Evan'),
   -- (4, 'Eric'),
   -- (5, 'Edward'),
@@ -98,8 +98,8 @@ create table mentors_at (
 );
 
 insert into trains_at(id, teacher_id, school_id, started_on, finished_on) values
-  (1, 1, 1, '2021-09-01', null)
-  -- (2, 2, 1, '2021-09-02', '2022-09-02'),
+  (1, 1, 1, '2021-09-01', null),
+  (2, 2, 1, '2021-09-02', null)
   -- (3, 3, 1, '2021-09-03', null),
   -- (4, 4, 1, '2021-09-04', null),
   -- (5, 5, 1, '2021-09-05', null),
@@ -213,8 +213,8 @@ create table training (
 
 insert into training(id, provider_partnership_id, teacher_id, training_type, started_on, finished_on) values
   (1, 1, 1, 'FIP', '2022-09-08', '2023-05-01'),
-  (2, 2, 1, 'FIP', '2023-06-02', null)
-  -- (2, 1, 2, 'FIP', '2022-09-09', null),
+  (2, 2, 1, 'FIP', '2023-06-02', null),
+  (3, 2, 1, 'FIP', '2022-09-09', null)
   -- (3, 1, 3, 'FIP', '2022-09-10', null),
   -- (4, 1, 4, 'CIP', '2022-09-11', null),
   -- (5, 3, 5, 'CIP', '2022-09-12', '2023-09-14'),
@@ -239,4 +239,5 @@ create table declarations(
 
 insert into declarations (id, training_id, course_type) values
   (1, 1, 'ECF Induction'),
-  (1, 2, 'ECF Induction');
+  (2, 2, 'ECF Induction'),
+  (3, 3, 'ECF Induction');
